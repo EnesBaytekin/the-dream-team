@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/CardDisplay.gd" id="1"]
+
+[node name="CardDisplay" type="Panel"]
+custom_minimum_size = Vector2(170, 260)
+size = Vector2(170, 260)
+script = ExtResource("1")
+
+[node name="PortraitRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 8
+offset_top = 8
+offset_right = 162
+offset_bottom = 88
+color = Color(0.25, 0.3, 0.45, 1)
+
+[node name="BattleOverlay" type="Label" parent="."]
+layout_mode = 0
+offset_left = 8
+offset_top = 72
+offset_right = 162
+offset_bottom = 88
+visible = false
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 8
+offset_top = 92
+offset_right = 162
+offset_bottom = 108
+
+[node name="SkillsContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 8
+offset_top = 112
+offset_right = 162
+offset_bottom = 230
+
+[node name="JamLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 8
+offset_top = 233
+offset_right = 135
+offset_bottom = 248
+
+[node name="CardNumberLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 130
+offset_top = 240
+offset_right = 162
+offset_bottom = 254
+horizontal_alignment = 2
+
+[node name="DeadOverlay" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 0
+offset_top = 0
+offset_right = 170
+offset_bottom = 260
+color = Color(0, 0, 0, 0.55)
+visible = false
+
+[node name="DeadLabel" type="Label" parent="DeadOverlay"]
+layout_mode = 0
+offset_left = 0
+offset_top = 110
+offset_right = 170
+offset_bottom = 140
+text = "DEFEATED"
+horizontal_alignment = 1
+vertical_alignment = 1
