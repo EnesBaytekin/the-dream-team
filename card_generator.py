@@ -97,7 +97,7 @@ def print_card(card, width, number=None):
     bottom = "└" + "─" * (width - 2) + "┘"
 
     number_label = f"  #{number}" if number else ""
-    title_line = f"│ {lines[0]}" + " " * (inner - len(lines[0])) + " │"
+    title_line = f"│ {lines[0]}{number_label}" + " " * (inner - len(lines[0]) - len(number_label)) + " │"
 
     print()
     print(top)
