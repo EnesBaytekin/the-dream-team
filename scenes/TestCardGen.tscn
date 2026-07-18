@@ -12,29 +12,65 @@ script = ExtResource("1")
 layout_mode = 0
 offset_left = 10
 offset_top = 10
-offset_right = 130
+offset_right = 105
 offset_bottom = 40
-text = "Spawn Card"
+text = "Spawn"
 
 [node name="ClearBtn" type="Button" parent="."]
 layout_mode = 0
-offset_left = 140
+offset_left = 110
 offset_top = 10
-offset_right = 240
+offset_right = 195
 offset_bottom = 40
 text = "Clear"
 
 [node name="CountLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 250
+offset_left = 200
 offset_top = 10
-offset_right = 400
+offset_right = 340
 offset_bottom = 40
 text = "Cards: 0"
+
+[node name="NormalBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 350
+offset_top = 10
+offset_right = 395
+offset_bottom = 40
+text = "N"
+tooltip_text = "Normal"
+
+[node name="SelectedBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 400
+offset_top = 10
+offset_right = 450
+offset_bottom = 40
+text = "Sel"
+tooltip_text = "Selected"
+
+[node name="PickableBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 455
+offset_top = 10
+offset_right = 500
+offset_bottom = 40
+text = "Pik"
+tooltip_text = "Pickable"
+
+[node name="DefeatedBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 505
+offset_top = 10
+offset_right = 550
+offset_bottom = 40
+text = "Def"
+tooltip_text = "Defeated"
 
 [node name="CardContainer" type="Control" parent="."]
 layout_mode = 0
 offset_left = 0
 offset_top = 50
-offset_right = 960
-offset_bottom = 540
+offset_right = 640
+offset_bottom = 360
