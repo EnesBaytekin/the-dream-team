@@ -31,6 +31,16 @@ def _rps_outcome(player, cpu):
 
 # ─── Display helpers ─────────────────────────────────────────────────
 
+def _deck_width(deck, minimum=38):
+    """Return the widest card width across the deck."""
+    w = minimum
+    for c in deck:
+        cw = _card_width(c)
+        if cw > w:
+            w = cw
+    return w
+
+
 def _show_deck(deck, width):
     """Print all cards in the deck as full card boxes."""
     print()
@@ -39,14 +49,15 @@ def _show_deck(deck, width):
     if not deck:
         print("    (empty)")
     else:
+        w = _deck_width(deck, width)
         for i, card in enumerate(deck, start=1):
-            _print_raw(card, width, number=i)
+            _print_raw(card, w, number=i)
 
 
 # ─── Main game loop ──────────────────────────────────────────────────
 
 def main():
-    deck = []
+    deck = [generate_card() for _ in range(3)]
     width = 38
 
     print()
@@ -58,9 +69,11 @@ def main():
     print("║  Draw → nothing happens                  ║")
     print("╚══════════════════════════════════════════╝")
 
+    _show_deck(deck, width)
+
     while True:
         print()
-        cmd = input("  [r]ock [p]aper [s]cissors [q]uit > ").strip().lower()
+        cmd = input("  [r/p/s or 1/2/3] [q]uit > ").strip().lower()
 
         if cmd == "q":
             print()
@@ -68,11 +81,11 @@ def main():
             print("  See you!\n")
             break
 
-        if cmd in ("r", "rock"):
+        if cmd in ("r", "rock", "1"):
             player = "rock"
-        elif cmd in ("p", "paper"):
+        elif cmd in ("p", "paper", "2"):
             player = "paper"
-        elif cmd in ("s", "scissors"):
+        elif cmd in ("s", "scissors", "3"):
             player = "scissors"
         else:
             print("  ❓ Type r, p, s, or q.")
@@ -96,7 +109,8 @@ def main():
             if deck:
                 print("  Which card to discard? (Enter = first card)")
                 for i, c in enumerate(deck, start=1):
-                    print(f"    [{i}] {c['name']}  (Jam #{c['game_jam']})")
+                    skill_list = ", ".join(f"{s['name']} ({s['level']})" for s in c["skills"])
+                    print(f"    [{i}] {c['name']}  (Jam #{c['game_jam']})  {skill_list}")
                 while True:
                     pick = input("  Discard #: ").strip()
                     if pick == "":

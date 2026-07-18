@@ -39,6 +39,8 @@ SKILLS = {
 }
 
 GAME_JAM_MAX = 10  # maximum game jam number — smaller numbers are more common
+SKILL_MIN = 25     # skill level floor — nobody has a skill below this
+SKILL_MAX = 100    # skill level ceiling
 
 
 # ─── Helpers ─────────────────────────────────────────────────────────
@@ -68,6 +70,12 @@ def _weighted_rand(max_val):
     return 1 + int((max_val - 1) * (random.random() ** 2))
 
 
+def _skill_level():
+    """Generate a skill proficiency level (SKILL_MIN..SKILL_MAX).
+    Biased toward higher values — people listed in a skill tend to be decent at it."""
+    return SKILL_MIN + int((SKILL_MAX - SKILL_MIN) * (random.random() ** 0.7))
+
+
 def generate_card():
     """Generate one random card and return as dict."""
     _check_empty(NAMES, "NAMES")
@@ -76,20 +84,33 @@ def generate_card():
     jam_number = _weighted_rand(GAME_JAM_MAX)
     skill_count = random.randint(1, 3)
 
+    raw_skills = _pick_weighted(SKILLS, skill_count)
+    skills = [
+        {"name": s, "level": _skill_level()}
+        for s in raw_skills
+    ]
+
     return {
         "name": random.choice(NAMES),
-        "skills": _pick_weighted(SKILLS, skill_count),
+        "skills": skills,
         "game_jam": jam_number,
     }
 
 
 def print_card(card, width, number=None):
     """Print one card as a closed rectangle, padded to `width`."""
-    lines = [card["name"]]
-    lines.append(f"  Game Jam: {card['game_jam']}")
+    # Gather text lines first
+    lines = []
+    lines.append(card["name"])
+    lines.append(f"  Game Jam #{card['game_jam']}")
     lines.append("")
+
+    # Figure out padding for skill names so bars line up
+    max_skill_len = max(len(s["name"]) for s in card["skills"]) if card["skills"] else 0
     for s in card["skills"]:
-        lines.append(f"    • {s}")
+        filled = s["level"] // 20
+        bar = "█" * filled + "░" * (5 - filled)
+        lines.append(f"    • {s['name']:<{max_skill_len}}  {bar}  {s['level']:>3}")
 
     inner = width - 4  # "│ " left + " │" right
 
@@ -113,9 +134,9 @@ def print_card(card, width, number=None):
 def _card_width(card):
     """Return the minimum width needed for this card's content."""
     items = [card["name"]]
-    items.append(f"  Game Jam: {card['game_jam']}")
+    items.append(f"  Game Jam #{card['game_jam']}")
     for s in card["skills"]:
-        items.append(f"    • {s}")
+        items.append(f"    • {s['name']}  {'█' * 5}  {s['level']:>3}")
     return max(len(l) for l in items) + 6  # borders + padding
 
 
