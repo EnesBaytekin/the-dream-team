@@ -22,6 +22,10 @@ var _card_number: int = 0
 func _ready():
 	if Engine.is_editor_hint():
 		return
+	# Make panel transparent so CardBaseTexture shows through
+	var transparent_sb = StyleBoxFlat.new()
+	transparent_sb.bg_color = Color.TRANSPARENT
+	add_theme_stylebox_override("panel", transparent_sb)
 	_setup_fonts()
 	mouse_entered.connect(_on_mouse_enter)
 	mouse_exited.connect(_on_mouse_exit)
