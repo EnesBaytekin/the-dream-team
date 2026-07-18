@@ -6,22 +6,22 @@
 [ext_resource type="FontFile" path="res://assets/Mojang-Regular.ttf" id="4_8w5pg"]
 [ext_resource type="Script" path="res://scripts/CardDisplay.gd" id="5_fv0sb"]
 
-[node name="Card" type="MarginContainer" unique_id=1115440412]
+[node name="Card" type="MarginContainer"]
 offset_right = 64.0
 offset_bottom = 80.0
 pivot_offset = Vector2(32, 40)
 script = ExtResource("5_fv0sb")
 
-[node name="CardBase" type="TextureRect" parent="." unique_id=1748120023]
+[node name="CardBase" type="TextureRect" parent="."]
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("1_kg30u")
-mouse_filter = 2
 
-[node name="Control" type="Control" parent="." unique_id=1625597394]
+[node name="Control" type="Control" parent="."]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="UserPP" type="TextureRect" parent="Control" unique_id=2106781804]
+[node name="UserPP" type="TextureRect" parent="Control"]
 layout_mode = 0
 offset_top = 15.0
 offset_right = 96.0
@@ -29,7 +29,7 @@ offset_bottom = 69.0
 texture = ExtResource("2_sy11y")
 stretch_mode = 5
 
-[node name="UserName" type="Label" parent="Control" unique_id=815803547]
+[node name="UserName" type="Label" parent="Control"]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 71.0
@@ -40,7 +40,7 @@ theme_override_font_sizes/font_size = 8
 text = "Username"
 horizontal_alignment = 1
 
-[node name="JamCount" type="Label" parent="Control" unique_id=791308954]
+[node name="JamCount" type="Label" parent="Control"]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 109.0
@@ -51,7 +51,7 @@ theme_override_font_sizes/font_size = 8
 text = "Jam #3"
 horizontal_alignment = 2
 
-[node name="Skill1" type="Label" parent="Control" unique_id=988442377]
+[node name="Skill1" type="Label" parent="Control"]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 82.0
@@ -61,7 +61,7 @@ theme_override_fonts/font = ExtResource("4_8w5pg")
 theme_override_font_sizes/font_size = 8
 text = "* Unity"
 
-[node name="Skill2" type="Label" parent="Control" unique_id=1299691385]
+[node name="Skill2" type="Label" parent="Control"]
 visible = false
 layout_mode = 0
 offset_left = 4.0
@@ -72,7 +72,7 @@ theme_override_fonts/font = ExtResource("4_8w5pg")
 theme_override_font_sizes/font_size = 8
 text = "* Godot"
 
-[node name="Skill3" type="Label" parent="Control" unique_id=1080311731]
+[node name="Skill3" type="Label" parent="Control"]
 visible = false
 layout_mode = 0
 offset_left = 4.0
@@ -83,22 +83,22 @@ theme_override_fonts/font = ExtResource("4_8w5pg")
 theme_override_font_sizes/font_size = 8
 text = "* Python"
 
-[node name="SelectHighlight" type="ColorRect" parent="Control" unique_id=298306509]
+[node name="HoverOverlay" type="ColorRect" parent="Control"]
+visible = false
 layout_mode = 0
 offset_right = 96.0
 offset_bottom = 120.0
-color = Color(1, 1, 1, 0.13725491)
 mouse_filter = 2
-visible = false
+color = Color(1, 1, 1, 0.15)
 
-[node name="DefeatedOverlay" type="ColorRect" parent="Control" unique_id=1082569150]
+[node name="DefeatedOverlay" type="ColorRect" parent="Control"]
 visible = false
 layout_mode = 0
 offset_right = 96.0
 offset_bottom = 120.0
 color = Color(0, 0, 0, 0.5)
 
-[node name="DefeatedLabel" type="Label" parent="Control/DefeatedOverlay" unique_id=599269998]
+[node name="DefeatedLabel" type="Label" parent="Control/DefeatedOverlay"]
 layout_mode = 0
 offset_top = 50.0
 offset_right = 96.0

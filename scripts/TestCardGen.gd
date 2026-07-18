@@ -30,8 +30,8 @@ func _on_spawn():
 	var card = card_scene.instantiate()
 	card.display(data)
 	card.set_state(0)
+	card.clicked.connect(_on_card_clicked)
 
-	# 6 columns max, 96px wide card + 4px gap = 100px, fits in 640px viewport
 	var col = cards_on_screen.size() % 6
 	var row = floori(cards_on_screen.size() / 6)
 	card.position = Vector2(col * 100 + 20, row * 130 + 20)
@@ -39,6 +39,26 @@ func _on_spawn():
 	container.add_child(card)
 	cards_on_screen.append(card)
 	_update_count()
+
+
+func _on_card_clicked(data: Dictionary):
+	# Only handle if currently in PICKABLE mode
+	var any_pickable = false
+	for c in cards_on_screen:
+		if is_instance_valid(c) and c.get_state() == 2:
+			any_pickable = true
+			break
+	if not any_pickable:
+		return
+
+	# Find which card was clicked by matching card_data, set it SELECTED, others NORMAL
+	for c in cards_on_screen:
+		if not is_instance_valid(c):
+			continue
+		if c.card_data == data:
+			c.set_state(1)  # SELECTED
+		else:
+			c.set_state(0)  # NORMAL
 
 
 func _set_all_state(state: int):

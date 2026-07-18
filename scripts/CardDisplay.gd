@@ -4,6 +4,8 @@ enum State { NORMAL, SELECTED, PICKABLE, DEFEATED }
 
 @export var card_data: Dictionary = {} : set = _set_card_data
 
+signal clicked(card_data: Dictionary)
+
 var _state: int = State.NORMAL
 var _base_y: float = 0.0
 var _tween: Tween = null
@@ -13,15 +15,37 @@ var _target_y: float = INF
 @onready var user_name: Label = $Control/UserName
 @onready var jam_count: Label = $Control/JamCount
 @onready var skill_labels: Array = [$Control/Skill1, $Control/Skill2, $Control/Skill3]
-@onready var select_highlight: ColorRect = $Control/SelectHighlight
+@onready var hover_overlay: ColorRect = $Control/HoverOverlay
 @onready var defeated_overlay: ColorRect = $Control/DefeatedOverlay
+
+var _border_pieces: Array = []
 
 
 func _ready():
 	_base_y = position.y
+	_create_border()
 	mouse_entered.connect(_on_hover)
 	mouse_exited.connect(_on_unhover)
 	_apply_state()
+
+
+func _create_border():
+	var control = $Control
+	var pieces = [
+		[0, 0, 96, 1],
+		[0, 119, 96, 120],
+		[0, 0, 1, 120],
+		[95, 0, 96, 120],
+	]
+	for p in pieces:
+		var rect = ColorRect.new()
+		rect.color = Color.WHITE
+		rect.mouse_filter = MOUSE_FILTER_IGNORE
+		rect.position = Vector2(p[0], p[1])
+		rect.size = Vector2(p[2] - p[0], p[3] - p[1])
+		rect.hide()
+		control.add_child(rect)
+		_border_pieces.append(rect)
 
 
 func _set_card_data(value: Dictionary):
@@ -55,6 +79,16 @@ func _smooth_move(target_y: float):
 	_tween.finished.connect(func(): _target_y = INF, CONNECT_ONE_SHOT)
 
 
+func _show_border():
+	for b in _border_pieces:
+		b.show()
+
+
+func _hide_border():
+	for b in _border_pieces:
+		b.hide()
+
+
 func _apply_state():
 	if not is_inside_tree():
 		return
@@ -62,55 +96,48 @@ func _apply_state():
 		State.NORMAL:
 			mouse_filter = MOUSE_FILTER_IGNORE
 			_smooth_move(_base_y)
-			_remove_border()
-			select_highlight.hide()
+			hover_overlay.hide()
+			_hide_border()
 			defeated_overlay.hide()
 
 		State.SELECTED:
 			mouse_filter = MOUSE_FILTER_IGNORE
 			_smooth_move(_base_y - 6)
-			_add_border(Color(1, 1, 1), 2)
-			select_highlight.hide()
+			hover_overlay.hide()
+			_show_border()
 			defeated_overlay.hide()
 
 		State.PICKABLE:
 			mouse_filter = MOUSE_FILTER_STOP
 			_smooth_move(_base_y)
-			_remove_border()
-			select_highlight.hide()
+			hover_overlay.hide()
+			_hide_border()
 			defeated_overlay.hide()
 
 		State.DEFEATED:
 			mouse_filter = MOUSE_FILTER_IGNORE
 			_smooth_move(_base_y)
-			_remove_border()
-			select_highlight.hide()
+			hover_overlay.hide()
+			_hide_border()
 			defeated_overlay.show()
 
 
-func _add_border(color: Color, width: float):
-	var sb = StyleBoxFlat.new()
-	sb.bg_color = Color.TRANSPARENT
-	sb.border_color = color
-	sb.set("border_width_all", width)
-	add_theme_stylebox_override("panel", sb)
-
-
-func _remove_border():
-	remove_theme_stylebox_override("panel")
+func _gui_input(event: InputEvent):
+	if _state == State.PICKABLE and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		clicked.emit(card_data)
+		accept_event()
 
 
 func _on_hover():
 	if _state == State.PICKABLE:
 		_smooth_move(_base_y - 6)
-		select_highlight.color = Color(1, 1, 1, 0.2)
-		select_highlight.show()
+		hover_overlay.show()
 
 
 func _on_unhover():
 	if _state == State.PICKABLE:
 		_smooth_move(_base_y)
-		select_highlight.hide()
+		hover_overlay.hide()
 
 
 func _refresh():
