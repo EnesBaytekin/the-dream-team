@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/TestCardGen.gd" id="1"]
+
+[node name="TestCardGen" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="SpawnBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 10
+offset_top = 10
+offset_right = 130
+offset_bottom = 40
+text = "Spawn Card"
+
+[node name="ClearBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 140
+offset_top = 10
+offset_right = 240
+offset_bottom = 40
+text = "Clear"
+
+[node name="CountLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 250
+offset_top = 10
+offset_right = 400
+offset_bottom = 40
+text = "Cards: 0"
+
+[node name="CardContainer" type="Control" parent="."]
+layout_mode = 0
+offset_left = 0
+offset_top = 50
+offset_right = 960
+offset_bottom = 540
