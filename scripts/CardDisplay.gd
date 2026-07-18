@@ -5,7 +5,7 @@ extends MarginContainer
 @onready var user_pp: TextureRect = $Control/UserPP
 @onready var user_name: Label = $Control/UserName
 @onready var jam_count: Label = $Control/JamCount
-@onready var skill1: Label = $Control/Skill1
+@onready var skill_labels: Array = [$Control/Skill1, $Control/Skill2, $Control/Skill3]
 
 
 func _set_card_data(value: Dictionary):
@@ -25,12 +25,19 @@ func _refresh():
 		return
 
 	user_name.text = card_data.get("name", "??")
-	jam_count.text = "Jam #%d" % card_data.get("game_jam", 0)
+	var jam_number = card_data.get("game_jam", 0)
+	var jam_suffix = "th"
+	match jam_number%10:
+		1: jam_suffix = "st"
+		2: jam_suffix = "nd"
+		3: jam_suffix = "rd"
+	jam_count.text = ("%d" % jam_number) + jam_suffix + " jam"
 
 	var skills: Array = card_data.get("skills", [])
-	if skills.size() > 0:
-		var s = skills[0]
-		skill1.text = "  * %s" % s.get("name", "?")
-		skill1.show()
-	else:
-		skill1.hide()
+	for i in range(skill_labels.size()):
+		if i < skills.size():
+			var s = skills[i]
+			skill_labels[i].text = "* %s" % s.get("name", "?")
+			skill_labels[i].show()
+		else:
+			skill_labels[i].hide()

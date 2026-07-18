@@ -1,6 +1,6 @@
 extends Control
 
-var card_scene: PackedScene = preload("res://scenes/card.tscn")
+var card_scene: PackedScene = preload("res://scenes/Card.tscn")
 var cards_on_screen: Array = []
 
 @onready var container: Control = $CardContainer
