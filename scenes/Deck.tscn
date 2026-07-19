@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/Deck.gd" id="1"]
+
+[node name="Deck" type="Control"]
+size = Vector2(640, 80)
+script = ExtResource("1")
