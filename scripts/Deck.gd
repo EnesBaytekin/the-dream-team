@@ -24,10 +24,13 @@ func _rebuild():
 	_displays.clear()
 	if cards.is_empty(): return
 
+	var total_w = cards.size() * 96 + (cards.size() - 1) * (card_offset_x - 96)
+	var start_x = (size.x - total_w) / 2
+
 	for i in range(cards.size()):
 		var card = card_scene.instantiate()
 		card.display(cards[i])
-		card.position = Vector2(i * card_offset_x, 0)
+		card.position = Vector2(start_x + i * card_offset_x, 0)
 		card.clicked.connect(_on_card_clicked)
 		add_child(card)
 		_displays.append(card)
@@ -57,7 +60,9 @@ func set_all_states(state: int):
 
 
 func reset_states():
-	set_all_states(0)
+	for c in _displays:
+		if is_instance_valid(c) and c.get_state() != 3:
+			c.set_state(0)
 
 
 func add_card(data: Dictionary):
