@@ -11,16 +11,17 @@ offset_bottom = 360
 color = Color(0.08, 0.1, 0.13, 1)
 [node name="PlayerHand" parent="." instance=ExtResource("2")]
 layout_mode = 0
-offset_left = 440
-offset_top = 80
-offset_right = 640
+offset_left = -40
+offset_top = 30
+offset_right = 360
 offset_bottom = 280
 [node name="EnemyHand" parent="." instance=ExtResource("2")]
 layout_mode = 0
-offset_left = 0
-offset_top = 80
-offset_right = 200
+offset_left = 280
+offset_top = 30
+offset_right = 680
 offset_bottom = 280
+side = 1
 [node name="ResultLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 0

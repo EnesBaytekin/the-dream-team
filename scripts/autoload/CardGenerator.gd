@@ -117,3 +117,39 @@ static func generate_card() -> Dictionary:
 		"skills": skills,
 		"game_jam": jam,
 	}
+
+
+static func generate_bad_card() -> Dictionary:
+	# Jam: higher numbers (less experienced)
+	var jam = _weighted_rand(GAME_JAM_MAX)
+	# Skill count: 1-2, biased toward 1
+	var skill_count = 1 if randf() < 0.65 else 2
+	var picked = _pick_weighted(SKILLS, skill_count)
+	var skills = []
+	for s in picked:
+		# Level: 1-4, biased toward 1-2
+		var lv = 1 + int(pow(randf(), 1.5) * 4.0)
+		skills.append({"name": s, "level": clampi(lv, 1, 4)})
+	return {
+		"name": NAMES[randi() % NAMES.size()],
+		"skills": skills,
+		"game_jam": clampi(jam, 6, GAME_JAM_MAX),
+	}
+
+
+static func generate_good_card() -> Dictionary:
+	# Jam: lower numbers (more experienced)
+	var jam = _weighted_rand(GAME_JAM_MAX)
+	# Skill count: 2-3, biased toward 3
+	var skill_count = 3 if randf() < 0.6 else 2
+	var picked = _pick_weighted(SKILLS, skill_count)
+	var skills = []
+	for s in picked:
+		# Level: 6-10, biased toward higher
+		var lv = 6 + int(pow(randf(), 0.6) * 5.0)
+		skills.append({"name": s, "level": clampi(lv, 6, 10)})
+	return {
+		"name": NAMES[randi() % NAMES.size()],
+		"skills": skills,
+		"game_jam": clampi(jam, 1, 5),
+	}

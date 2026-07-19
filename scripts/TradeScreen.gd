@@ -3,22 +3,21 @@ extends Control
 signal done(deck: Array)
 
 @onready var status_label: Label = $StatusLabel
-@onready var offer_area: Node = $OfferArea
+@onready var offer_area: Control = $OfferArea
 @onready var my_deck: Node = $MyDeck
 @onready var skip_btn: Button = $SkipBtn
 
 var _deck_data: Array = []
 var _offer_cards: Array = []
-var _won: bool = false
 
 
 func show_trade(won: bool, deck: Array):
 	_deck_data = deck.duplicate()
 	_offer_cards.clear()
-	_won = won
 
 	for c in offer_area.get_children(): c.queue_free()
-	skip_btn.show()
+	skip_btn.hide()
+	skip_btn.text = "Continue"
 	if skip_btn.pressed.is_connected(_on_skip):
 		skip_btn.pressed.disconnect(_on_skip)
 	skip_btn.pressed.connect(_on_skip, CONNECT_ONE_SHOT)
@@ -26,15 +25,16 @@ func show_trade(won: bool, deck: Array):
 	my_deck.cards = _deck_data.duplicate()
 
 	if won:
-		_do_win()
+		await _do_win()
 	else:
-		_do_lose()
+		await _do_lose()
+	skip_btn.show()
 
 
 func _do_win():
 	status_label.text = "YOU WIN! Pick a card to add!"
 	for i in range(3):
-		var data = CardGenerator.generate_card()
+		var data = CardGenerator.generate_good_card()
 		_offer_cards.append(data)
 		_add_offer_card(data, i)
 
@@ -64,8 +64,7 @@ func _do_lose():
 	status_label.text = "Pick a replacement card:"
 
 	for i in range(3):
-		var data = CardGenerator.generate_card()
-		for sk in data["skills"]: sk["level"] = maxi(1, sk["level"] - 4)
+		var data = CardGenerator.generate_bad_card()
 		_offer_cards.append(data)
 		_add_offer_card(data, i)
 
@@ -75,26 +74,27 @@ func _add_offer_card(data: Dictionary, idx: int):
 	card.display(data)
 	card.set_state(2)
 	card.clicked.connect(_on_card_chosen.bind(idx), CONNECT_ONE_SHOT)
-	card.position = Vector2(170 * idx + 50, 0)
+	card.position = Vector2(170 * idx + 50, 15)
 	offer_area.add_child(card)
 
 
 func _on_card_chosen(_data: Dictionary, idx: int):
+	skip_btn.hide()
+	status_label.text = "Adding card..."
+
 	var picked = _offer_cards[idx]
 
-	# Animate card flying from offer area to deck
 	var card_ui = preload("res://scenes/Card.tscn").instantiate()
 	card_ui.display(picked)
 	add_child(card_ui)
 
-	var sx = 170 * idx + 130
-	card_ui.position = Vector2(sx, 130)
-	card_ui.scale = Vector2(0.5, 0.5)
+	var sx = offer_area.position.x + 170 * idx + 50
+	card_ui.position = Vector2(sx, 60)
+	card_ui.scale = Vector2(0.6, 0.6)
 
 	var tw = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_property(card_ui, "position", Vector2(300, 280), 0.5)
-	tw.parallel().tween_property(card_ui, "scale", Vector2(0.7, 0.7), 0.5)
-	tw.parallel().tween_property(card_ui, "modulate:a", 0.0, 0.5)
+	tw.parallel().tween_property(card_ui, "scale", Vector2(0.5, 0.5), 0.5)
 	await tw.finished
 
 	card_ui.queue_free()

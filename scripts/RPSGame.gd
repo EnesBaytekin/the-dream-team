@@ -33,12 +33,15 @@ func _on_choice(choice: int):
 	_set_buttons_enabled(false)
 	_player_choice = choice
 	_cpu_choice = randi() % 3
-	result_label.text = "..."
+	result_label.text = ""
 
-	# Ready animation (placeholder)
-	player_hand.set_state(1)  # READY
-	enemy_hand.set_state(1)   # READY
-	await _wait(0.5)
+	# Both hands bob at the same time
+	var p_anim = player_hand.play_ready_animation()
+	var e_anim = enemy_hand.play_ready_animation()
+
+	# Wait for both to finish
+	await p_anim
+	await e_anim
 
 	# Show choices
 	player_hand.play_choice(_player_choice)

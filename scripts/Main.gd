@@ -36,6 +36,7 @@ func _on_fight(player_cards: Array):
 func _on_rps_ended(result: Dictionary):
 	rps.hide()
 	var won = result["result"] == "win"
+	trade.show()
 	trade.show_trade(won, _deck_cache)
 
 
